@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Engagement Platter – Memorable Zone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="stylep.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="product-page">
+
+    <div class="product-image">
+      <img src="../img/Engplatter.jpeg" alt="Engagement Platter" class="product-img">
+    </div>
+
+    <div class="product-info">
+      <h1>Engagement Platter</h1>
+      <div class="rating">★★★★★ (4.9)</div>
+	<span style="text-decoration: line-through;">₹1199</span>
+      <div class="price">₹899*</div>
+
+      <p class="description">
+        Made with premium resin, it blends artistic design with elegant detailing,
+        perfect for engagements, ceremonies, and gifting.
+      </p>
+
+      <div class="product-actions">
+        <button class="btn add-cart"
+          onclick="addToCart(10,'Engagement Platter',899,'../img/Engplatter.jpeg',this)">
+          Add to Cart
+        </button>
+
+        <button class="btn buy-now"
+          onclick="buyNow(10,'Engagement Platter',899,'../img/Engplatter.jpeg')">
+          Buy Now
+        </button>
+      </div>
+
+      <a href="fp copy.html" class="home-btn">← Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= RELATED PRODUCTS ================= -->
+<div class="related">
+  <h2 class="section-title">You May Also Like</h2>
+
+  <div class="related-scroll">
+
+    <!-- 1 -->
+    <div class="related-card">
+      <img src="../img/epr1.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Platter',1999,'../img/epr1.jpeg')">
+       Platter
+      </h3>
+	<span style="text-decoration: line-through;">₹2999</span>
+      <p>₹1999*</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="related-card">
+      <img src="../img/epr2.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Platter',1299,'../img/epr2.jpeg')">
+        Platter
+      </h3>
+	<span style="text-decoration: line-through;">₹1499</span>
+      <p>₹1299*</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="related-card">
+      <img src="../img/epr3.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Platter',1399,'../img/epr3.jpeg')">
+       Platter
+      </h3>
+	<span style="text-decoration: line-through;">₹1499</span>
+      <p>₹1399*</p>
+    </div>
+
+    <!-- 4 (NEW) -->
+    <div class="related-card">
+      <img src="../img/epr4.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Ring Platter',2499,'../img/epr4.jpeg')">
+        Ring Platter
+      </h3>
+	<span style="text-decoration: line-through;">₹3299</span>
+      <p>₹2499*</p>
+    </div>
+
+    <!-- 5 (NEW) -->
+    <div class="related-card">
+      <img src="../img/epr5.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Floral Engagement Tray',999,'../img/epr5.jpeg')">
+        Floral Engagement Tray
+      </h3>
+	<span style="text-decoration: line-through;">₹1299</span>
+      <p>₹999*</p>
+    </div>
+
+    <!-- 6 (NEW) -->
+    <div class="related-card">
+      <img src="../img/epr6.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Premium Engagement Platter',999,'../img/epr6.jpeg')">
+        Premium Engagement Platter
+      </h3>
+	<span style="text-decoration: line-through;">₹1299</span>
+      <p>₹999*</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= AUTO SCROLL ================= -->
+<script>
+const scrollBox = document.querySelector(".related-scroll");
+scrollBox.innerHTML += scrollBox.innerHTML;
+
+let speed = 0.6;
+let paused = false;
+
+function smoothScroll() {
+  if (!paused) {
+    scrollBox.scrollLeft += speed;
+    if (scrollBox.scrollLeft >= scrollBox.scrollWidth / 2) {
+      scrollBox.scrollLeft = 0;
+    }
+  }
+  requestAnimationFrame(smoothScroll);
+}
+
+scrollBox.addEventListener("mouseenter", () => paused = true);
+scrollBox.addEventListener("mouseleave", () => paused = false);
+scrollBox.addEventListener("touchstart", () => paused = true);
+scrollBox.addEventListener("touchend", () => paused = false);
+
+smoothScroll();
+</script>
+
+<!-- ================= CART ================= -->
+<script>
+function addToCart(id, name, price, image, btn) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  let found = cart.find(i => i.id === id);
+  if (found) {
+    found.qty += 1;
+  } else {
+    cart.push({ id, name, price, image, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  btn.innerText = "Added ✓";
+  btn.classList.add("added");
+}
+</script>
+
+<!-- ================= BUY NOW ================= -->
+<script>
+function buyNow(id, name, price, image) {
+  const orderItems = [{
+    id, name, price: Number(price), image, qty: 1
+  }];
+
+  localStorage.setItem("orderItems", JSON.stringify(orderItems));
+  window.location.href = "o.html";
+}
+</script>
+
+<!-- ================= IMAGE ZOOM ================= -->
+<script>
+function zoomImage(img) {
+  img.classList.toggle("zoomed");
+}
+</script>
+
+<!-- ================= NAME → ORDER ================= -->
+<script>
+function goToOrder(name, price, image) {
+  const orderItems = [{
+    name, price, image, qty: 1
+  }];
+
+  localStorage.setItem("orderItems", JSON.stringify(orderItems));
+  window.location.href = "o.html";
+}
+</script>
+
+<!-- 🔑 REQUIRED FOR ORDER FORM BACK BUTTON -->
+<script>
+localStorage.setItem("lastProductPage", window.location.href);
+</script>
+
+</body>
+</html>

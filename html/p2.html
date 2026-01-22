@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jewellery – Memorable Zone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="stylep.css">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ================= PRODUCT SECTION ================= -->
+<div class="product-page container">
+
+  <div class="product-image">
+    <img src="../img/jewellary.jpg" alt="Jewellery" class="product-img">
+  </div>
+
+  <div class="product-info">
+    <h1>Jewellery</h1>
+
+    <div class="rating">★★★★★ <span>(4.9)</span></div>
+	<span style="text-decoration: line-through;">₹379</span>
+    <div class="price">₹299*</div>
+
+    <p class="description">
+      Elegant earrings featuring real pressed flowers encased in resin,
+      framed with antique silver detailing and pastel beads.
+    </p>
+
+    <!-- ACTION BUTTONS -->
+    <div class="product-actions">
+
+      <button class="btn add-cart"
+        onclick="addToCart(2,'Jewellery',299,'../img/jewellary.jpg',this)">
+        Add to Cart
+      </button>
+
+      <button class="btn buy-now"
+        onclick="buyNow(2,'Jewellery',299,'../img/jewellary.jpg')">
+        Buy Now
+      </button>
+
+    </div>
+
+    <a href="fp copy.html" class="home-btn">← Back to Home</a>
+  </div>
+
+</div>
+
+<!-- ================= RELATED PRODUCTS ================= -->
+<section class="related-products">
+  <h2 class="section-title">Related Products</h2>
+
+  <div class="related-scroll">
+
+    <!-- 1 -->
+    <div class="related-card">
+      <img src="../img/jer1.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Daizes Zumke',449,'../img/jer1.jpeg')">
+        Daizes Zumke
+      </h3>
+	<span style="text-decoration: line-through;">₹579</span>
+      <p>₹449*</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="related-card">
+      <img src="../img/jer2.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Rose Zumke',299,'../img/jer2.jpeg')">
+        Rose Zumke
+      </h3>
+	<span style="text-decoration: line-through;">₹379</span>
+      <p>₹299*</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="related-card">
+      <img src="../img/jer3.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Pendant',179,'../img/jer3.jpeg')">
+        Pendant
+      </h3>
+	<span style="text-decoration: line-through;">₹249</span>
+      <p>₹179*</p>
+    </div>
+
+    <!-- 4 (NEW) -->
+    <div class="related-card">
+      <img src="../img/jer4.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Bangles',249,'../img/jer4.jpeg')">
+     	Bangles
+      </h3>
+	<span style="text-decoration: line-through;">₹329</span>
+      <p>₹249*</p>
+    </div>
+
+    <!-- 5 (NEW) -->
+    <div class="related-card">
+      <img src="../img/jer5.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Ring',199,'../img/jer5.jpeg')">
+        Ring
+      </h3>
+	<span style="text-decoration: line-through;">₹249</span>
+      <p>₹199*</p>
+    </div>
+
+    <!-- 6 (NEW) -->
+    <div class="related-card">
+      <img src="../img/jer6.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Bracelate',249,'../img/jer6.jpeg')">
+       Bracelate
+      </h3>
+	<span style="text-decoration: line-through;">₹329</span>
+      <p>₹249*</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= AUTO SCROLL ================= -->
+<script>
+const scrollBox = document.querySelector(".related-scroll");
+scrollBox.innerHTML += scrollBox.innerHTML;
+
+let speed = 0.6;
+let pause = false;
+
+function autoScroll() {
+  if (!pause) {
+    scrollBox.scrollLeft += speed;
+    if (scrollBox.scrollLeft >= scrollBox.scrollWidth / 2) {
+      scrollBox.scrollLeft = 0;
+    }
+  }
+  requestAnimationFrame(autoScroll);
+}
+
+scrollBox.addEventListener("mouseenter", () => pause = true);
+scrollBox.addEventListener("mouseleave", () => pause = false);
+scrollBox.addEventListener("touchstart", () => pause = true);
+scrollBox.addEventListener("touchend", () => pause = false);
+
+autoScroll();
+</script>
+
+<!-- ================= CART ================= -->
+<script>
+function addToCart(id, name, price, image, btn) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  let found = cart.find(i => i.id === id);
+  if (found) {
+    found.qty += 1;
+  } else {
+    cart.push({ id, name, price, image, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  btn.innerText = "Added ✓";
+  btn.classList.add("added");
+}
+</script>
+
+<!-- ================= BUY NOW ================= -->
+<script>
+function buyNow(id, name, price, image) {
+  const orderItems = [{
+    id, name, price: Number(price), image, qty: 1
+  }];
+
+  localStorage.setItem("orderItems", JSON.stringify(orderItems));
+  window.location.href = "o.html";
+}
+</script>
+
+<!-- ================= IMAGE ZOOM ================= -->
+<script>
+function zoomImage(img) {
+  img.classList.toggle("zoomed");
+}
+</script>
+
+<!-- ================= NAME → ORDER ================= -->
+<script>
+function goToOrder(name, price, image) {
+  const orderItems = [{
+    name, price, image, qty: 1
+  }];
+
+  localStorage.setItem("orderItems", JSON.stringify(orderItems));
+  window.location.href = "o.html";
+}
+</script>
+
+<script>
+/* Save current product page so order form back goes here */
+localStorage.setItem("lastProductPage", window.location.href);
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Candle Holder – Memorable Zone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="stylep.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="product-page">
+
+    <div class="product-image">
+      <img src="../img/candle.jpeg" alt="Candle Holder" class="product-img">
+    </div>
+
+    <div class="product-info">
+      <h1>Candle Holder</h1>
+      <div class="rating">★★★★★ (4.9)</div>
+		<span style="text-decoration: line-through;">₹249</span>
+      <div class="price">₹199*</div>
+
+      <p class="description">
+        Made with premium resin, it blends artistic design with soft ambient lighting,
+        perfect for modern homes and gifting.
+      </p>
+
+      <div class="product-actions">
+        <button class="btn add-cart"
+          onclick="addToCart(9,'Candle Holder',199,'../img/candle.jpeg',this)">
+          Add to Cart
+        </button>
+
+        <button class="btn buy-now"
+          onclick="buyNow(9,'Candle Holder',199,'../img/candle.jpeg')">
+          Buy Now
+        </button>
+      </div>
+
+      <a href="fp copy.html" class="home-btn">← Back to Home</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= RELATED PRODUCTS ================= -->
+<div class="related">
+  <h2 class="section-title">You May Also Like</h2>
+
+  <div class="related-scroll">
+
+    <!-- 1 -->
+    <div class="related-card">
+      <img src="../img/chr1.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder(' Candle holder',199,'../img/chr1.jpeg')">
+       Candle holder
+      </h3>
+	<span style="text-decoration: line-through;">₹249</span>
+      <p>₹199*</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="related-card">
+      <img src="../img/chr2.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder(' Candle holder',149,'../img/chr2.jpeg')">
+       Candle holder  
+      </h3>
+	<span style="text-decoration: line-through;">₹239</span>
+      <p>₹149*</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="related-card">
+      <img src="../img/chr6.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder(' Candle holder',249,'../img/chr6.jpeg')">
+         Candle holder
+      </h3>
+	<span style="text-decoration: line-through;">₹329</span>
+      <p>₹249*</p>
+    </div>
+
+    <!-- 4 (NEW) -->
+    <div class="related-card">
+      <img src="../img/chr3.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Decorative Candle Holder',149,'../img/chr3.jpeg')">
+        Decorative Candle Holder
+      </h3>
+	<span style="text-decoration: line-through;">₹329</span>
+      <p>₹149*</p>
+    </div>
+
+    <!-- 5 (NEW) -->
+    <div class="related-card">
+      <img src="../img/chr4.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Floral Resin Holder',149,'../img/chr4.jpeg')">
+        Floral Resin Holder
+      </h3>
+	<span style="text-decoration: line-through;">₹329</span>
+      <p>₹149*</p>
+    </div>
+
+    <!-- 6 (NEW) -->
+    <div class="related-card">
+      <img src="../img/chr5.jpeg" onclick="zoomImage(this)">
+      <h3 onclick="goToOrder('Premium Candle Stand',99,'../img/chr5.jpeg')">
+        Premium Candle Stand
+      </h3>
+	<span style="text-decoration: line-through;">₹119</span>
+      <p>₹99*</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= AUTO SCROLL ================= -->
+<script>
+const scrollBox = document.querySelector(".related-scroll");
+scrollBox.innerHTML += scrollBox.innerHTML;
+
+let speed = 0.6;
+let paused = false;
+
+function smoothScroll() {
+  if (!paused) {
+    scrollBox.scrollLeft += speed;
+    if (scrollBox.scrollLeft >= scrollBox.scrollWidth / 2) {
+      scrollBox.scrollLeft = 0;
+    }
+  }
+  requestAnimationFrame(smoothScroll);
+}
+
+scrollBox.addEventListener("mouseenter", () => paused = true);
+scrollBox.addEventListener("mouseleave", () => paused = false);
+scrollBox.addEventListener("touchstart", () => paused = true);
+scrollBox.addEventListener("touchend", () => paused = false);
+
+smoothScroll();
+</script>
+
+<!-- ================= CART ================= -->
+<script>
+function addToCart(id, name, price, image, btn) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  let found = cart.find(i => i.id === id);
+  if (found) {
+    found.qty += 1;
+  } else {
+    cart.push({ id, name, price, image, qty: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  btn.innerText = "Added ✓";
+  btn.classList.add("added");
+}
+</script>
+
+<!-- ================= BUY NOW ================= -->
+<script>
+function buyNow(id, name, price, image) {
+  const orderItems = [{
+    id, name, price: Number(price), image, qty: 1
+  }];
+
+  localStorage.setItem("orderItems", JSON.stringify(orderItems));
+  window.location.href = "o.html";
+}
+</script>
+
+<!-- ================= IMAGE ZOOM ================= -->
+<script>
+function zoomImage(img) {
+  img.classList.toggle("zoomed");
+}
+</script>
+
+<!-- ================= NAME → ORDER ================= -->
+<script>
+function goToOrder(name, price, image) {
+  const orderItems = [{
+    name, price, image, qty: 1
+  }];
+
+  localStorage.setItem("orderItems", JSON.stringify(orderItems));
+  window.location.href = "o.html";
+}
+</script>
+
+<!-- 🔑 REQUIRED FOR ORDER FORM BACK BUTTON -->
+<script>
+localStorage.setItem("lastProductPage", window.location.href);
+</script>
+
+</body>
+</html>
