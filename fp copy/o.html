@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Resin Art | Memorable Zone</title>
+
+<style>
+:root{
+  --primary:#2a9d8f;
+  --dark:#264653;
+  --danger:#e76f51;
+  --warning:#e9c46a;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:#fafafa;
+  padding:20px;
+}
+
+.back-sticky{
+  position:sticky;
+  top:0;
+  display:block;
+  padding:12px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  color:var(--primary);
+  font-weight:600;
+  text-decoration:none;
+  z-index:1000;
+}
+
+.inline-msg{
+  max-width:520px;
+  margin:20px auto;
+  padding:14px;
+  background:#eafaf6;
+  color:#1b7f6b;
+  border-left:5px solid var(--primary);
+  border-radius:8px;
+  text-align:center;
+  opacity:0;
+  transform:translateY(-15px);
+  transition:.4s;
+}
+.inline-msg.show{opacity:1;transform:translateY(0);}
+
+.order-form{
+  max-width:520px;
+  margin:20px auto;
+  background:#fff;
+  padding:26px;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+.order-form h2{text-align:center;margin-bottom:20px;color:var(--dark);}
+
+label{font-weight:600;font-size:14px;margin-bottom:6px;display:block;}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin-bottom:16px;
+  border-radius:8px;
+  border:1px solid #d9d9d9;
+}
+
+.product-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f1f8f6;
+  border:1px solid #d9d9d9;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:10px;
+}
+.product-name{font-size:14px;color:#1b7f6b;max-width:60%;}
+
+.qty-inline{
+  display:flex;
+  align-items:center;
+  background:#e8f5f3;
+  border-radius:30px;
+  padding:4px;
+}
+.qty-inline button{
+  width:28px;height:28px;
+  border-radius:50%;
+  border:none;
+  background:var(--primary);
+  color:#fff;
+  cursor:pointer;
+}
+.qty-inline span{min-width:22px;text-align:center;font-weight:600;}
+
+.remove-btn{
+  background:none;
+  border:none;
+  font-size:16px;
+  color:var(--danger);
+  cursor:pointer;
+}
+
+.summary{
+  background:#fff7e6;
+  border:1px dashed var(--warning);
+  padding:14px;
+  border-radius:10px;
+  margin:12px 0;
+}
+.summary div{display:flex;justify-content:space-between;margin:6px 0;}
+.summary strong{font-size:15px;}
+
+.submit-btn{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#2a9d8f,#1f8a7a);
+  border:none;
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.confirm-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+.confirm-box{
+  background:#fff;
+  padding:20px;
+  border-radius:14px;
+  width:90%;
+  max-width:320px;
+  text-align:center;
+}
+.confirm-actions{display:flex;gap:10px;}
+.confirm-actions button{
+  flex:1;padding:10px;border:none;border-radius:8px;cursor:pointer;
+}
+.cancel-btn{background:#e0e0e0;}
+.confirm-remove{background:var(--danger);color:#fff;}
+</style>
+</head>
+
+<body>
+
+<a href="#" id="backToProduct" class="back-sticky">← Back to Product</a>
+
+<div id="inlineMessage" class="inline-msg">
+✅ Order request received! We’ll contact you shortly.
+</div>
+
+<form class="order-form" id="orderForm">
+<h2>Place Your Order</h2>
+
+<label>Full Name *</label>
+<input type="text" name="name" required>
+
+<label>WhatsApp Number *</label>
+<input type="tel" name="phone" required>
+
+<label>Email</label>
+<input type="email" name="email">
+
+<label>Selected Products</label>
+<div id="productList"></div>
+
+<input type="hidden" id="productsInput">
+
+<div class="summary">
+  <div><span>Estimated Total</span><strong id="estTotal">₹0</strong></div>
+  <div><span>Advance (60%)</span><strong id="advance">₹0</strong></div>
+  <div><span>Balance</span><strong id="balance">₹0</strong></div>
+</div>
+
+<label>Customization / Message</label>
+<textarea name="customization" rows="4"></textarea>
+
+<label>Delivery Address *</label>
+<textarea name="address" required></textarea>
+
+<label>Pin Code *</label>
+<input type="text" name="pincode" maxlength="6" required>
+
+<button type="submit" class="submit-btn">Submit Order</button>
+</form>
+
+<div class="confirm-overlay" id="confirmBox">
+  <div class="confirm-box">
+    <p>Remove this item?</p>
+    <div class="confirm-actions">
+      <button class="cancel-btn" onclick="closeConfirm()">Cancel</button>
+      <button class="confirm-remove" onclick="confirmRemove()">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ======================
+     LOAD CART DATA
+  ====================== */
+  let orderItems = JSON.parse(localStorage.getItem("orderItems")) || [];
+  let removeIndex = null;
+
+  const list = document.getElementById("productList");
+  const est = document.getElementById("estTotal");
+  const adv = document.getElementById("advance");
+  const bal = document.getElementById("balance");
+  const productsInput = document.getElementById("productsInput");
+  const form = document.getElementById("orderForm");
+  const msg = document.getElementById("inlineMessage");
+  const confirmBox = document.getElementById("confirmBox");
+
+  /* ======================
+     BACK TO PRODUCT
+  ====================== */
+  const backBtn = document.getElementById("backToProduct");
+  const lastProduct = localStorage.getItem("lastProductPage");
+
+  if (lastProduct) {
+    backBtn.href = lastProduct;
+  } else {
+    backBtn.href = "index.html"; // fallback
+  }
+
+  /* ======================
+     RENDER PRODUCTS
+  ====================== */
+  function render() {
+    list.innerHTML = "";
+    let total = 0;
+
+    if (!orderItems.length) {
+      list.innerHTML = "<p>No products selected.</p>";
+      est.innerText = adv.innerText = bal.innerText = "₹0";
+      return;
+    }
+
+    orderItems.forEach((item, i) => {
+      total += item.price * item.qty;
+
+      list.innerHTML += `
+        <div class="product-item">
+          <div class="product-name">${item.name} – ₹${item.price}</div>
+          <div>
+            <div class="qty-inline">
+              <button type="button" onclick="changeQty(${i},-1)">−</button>
+              <span>${item.qty}</span>
+              <button type="button" onclick="changeQty(${i},1)">+</button>
+            </div>
+            <button type="button" class="remove-btn" onclick="askRemove(${i})">❌</button>
+          </div>
+        </div>
+      `;
+    });
+
+    const advance = Math.round(total * 0.6);
+    est.innerText = "₹" + total;
+    adv.innerText = "₹" + advance;
+    bal.innerText = "₹" + (total - advance);
+
+    productsInput.value = orderItems
+      .map(i => `${i.name} (Qty:${i.qty})`)
+      .join(", ");
+  }
+
+  /* ======================
+     QUANTITY CONTROL
+  ====================== */
+  window.changeQty = function (i, change) {
+    orderItems[i].qty = Math.max(1, orderItems[i].qty + change);
+    save();
+  };
+
+  /* ======================
+     REMOVE ITEM
+  ====================== */
+  window.askRemove = function (i) {
+    removeIndex = i;
+    confirmBox.style.display = "flex";
+  };
+
+  window.closeConfirm = function () {
+    confirmBox.style.display = "none";
+  };
+
+  window.confirmRemove = function () {
+    if (removeIndex !== null) {
+      orderItems.splice(removeIndex, 1);
+      closeConfirm();
+      save();
+    }
+  };
+
+  function save() {
+    localStorage.setItem("orderItems", JSON.stringify(orderItems));
+    render();
+  }
+
+  /* ======================
+     SUBMIT ORDER
+  ====================== */
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    if (!orderItems.length) {
+      alert("No products selected");
+      return;
+    }
+
+    const total = orderItems.reduce((s, i) => s + i.price * i.qty, 0);
+    const advance = Math.round(total * 0.6);
+
+    fetch("https://sheetdb.io/api/v1/j0gjzlgdfodym", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        data: [{
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          phone: String(form.phone.value.trim()),
+          address: form.address.value.trim(),
+          pincode: form.pincode.value.trim(),
+          product: productsInput.value,
+
+          order_amount: String(total),     // ✅ final working column
+          advance: String(advance),
+
+          payment: "Pending",
+          message: form.customization.value || ""
+        }]
+      })
+    })
+    .then(res => res.json())
+    .then(() => {
+      msg.classList.add("show");
+      localStorage.removeItem("orderItems");
+      setTimeout(() => location.href = "thank.html", 1000);
+    })
+    .catch(err => {
+      alert("Order failed. Please try again.");
+      console.error(err);
+    });
+  });
+
+  /* ======================
+     INIT
+  ====================== */
+  render();
+});
+</script>
+
+</body>
+</html>
