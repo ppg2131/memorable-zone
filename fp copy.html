@@ -18,8 +18,10 @@
 <!-- ================= NAVBAR ================= -->
 <header>
   <nav>
+
     <div class="logo">Memorable<span>Zone</span></div>
 
+    <!-- MOBILE MENU LINKS -->
     <div class="nav-links" id="navLinks">
       <a href="#home">Home</a>
       <a href="#gallery">Gallery</a>
@@ -34,14 +36,13 @@
         <span></span>
       </div>
 
-     <a href="cart copy.html" class="nav-cart">
-  🛒
-  <span id="cart-count">0</span>
-</a>
+      <a href="cart copy.html" class="nav-cart">
+        🛒 <span id="cart-count">0</span>
+      </a>
+    </div>
 
   </nav>
 </header>
-<br>
 
 <!-- ===== SALE STRIP ===== -->
 <div class="sale-strip">
@@ -56,13 +57,22 @@
 <br>
 
 <!-- ================= HERO ================= -->
-<section id="home" class="hero">
-  <div class="hero-content">
-    <h1>Memorable Zone</h1>
-    <p>Where Emotions Meet Art – Handcrafted Resin Masterpieces</p>
-    <a href="#gallery" class="btn">Explore Collection</a>
-  </div>
-</section>
+<div class="banner-slider">
+  <div class="slides">
+
+    <a href="op.html" class="slide">
+      <img src="img\sale.jpeg" alt="Valentine Sale Banner">
+    </a>
+
+    <a href="op.html" class="slide">
+      <img src="img/offer.png"" alt="Valentine Sale Banner">
+    </a>
+
+    <a href="op.html" class="slide">
+      <img src="img/sale2.png"" alt="Valentine Sale Banner">
+    </a>
+ </div>
+</div>
 
 <!-- ================= GALLERY ================= -->
 <section id="gallery" class="gallery">
@@ -85,6 +95,13 @@
 </p>
 
     <div class="gallery-grid">
+
+      <div class="gallery-item">
+        <a href="p12.html">
+          <img src="img/vg1.jpeg" alt="Photo Frame">
+        </a>
+        <h3 class="product-title">VALENTINE GIFTS</h3>
+	</div>
 
       <div class="gallery-item">
         <a href="p1.html">
@@ -343,11 +360,37 @@ function updateCartCount() {
   }
 }
 
-/* Run on page load */
-document.addEventListener("DOMContentLoaded", updateCartCount);
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const slider = document.querySelector(".slides");
+  const slides = document.querySelectorAll(".slide");
+  let index = 0;
+
+  function autoSwipe(){
+    index++;
+
+    if(index >= slides.length){
+      index = 0;
+    }
+
+    const slideWidth = slides[0].offsetWidth;
+    slider.style.transform = `translateX(-${index * slideWidth}px)`;
+  }
+
+  setInterval(autoSwipe, 3000); // slide every 3 seconds
+
+});
 </script>
 
+<script>
+const menuToggle = document.getElementById("menuToggle");
+const navLinks = document.getElementById("navLinks");
 
+menuToggle.addEventListener("click", function(){
+  navLinks.classList.toggle("active");
+});
+</script>
 
 </body>
 </html>
