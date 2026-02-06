@@ -50,21 +50,68 @@ nav {
   color: var(--primary);
 }
 
-.nav-links {
-  display: flex;
-  gap: 22px;
+/* ===== MAKE NAV POSITIONED (VERY IMPORTANT) ===== */
+nav {
+  position: relative;
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: var(--dark);
-  font-weight: 500;
+/* ===== HAMBURGER BUTTON ===== */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
 }
 
-.nav-right {
+.menu-toggle span {
+  width: 26px;
+  height: 3px;
+  background: #264653;
+  border-radius: 2px;
+}
+
+/* ===== MOBILE MENU ===== */
+@media (max-width: 768px) {
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav-links{
+    position: absolute;
+    top: 60px;      /* directly under menu button */
+    right: 10px;
+    width: 180px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    display: none;        /* hidden by default */
+    flex-direction: column;
+    padding: 8px;
+    z-index: 9999;
+  }
+
+  .nav-links a{
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    color: #264653;
+  }
+
+  .nav-links a:last-child{
+    border-bottom: none;
+  }
+
+  /* THIS IS THE ONLY CLASS WE USE */
+  .nav-links.active{
+    display: flex !important;
+  }
+}
+
+.nav-right{
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;   /* space between menu & cart */
 }
 
 /* =====================
@@ -88,38 +135,6 @@ nav {
   display: none;         /* hidden when empty */
 }
 
-/* =====================
-   HERO
-===================== */
-.hero {
-  height: 70vh;
-  background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-              url("../img/hero.jpg") center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.hero-content h1 {
-  font-size: 42px;
-  color: #fff;
-}
-
-.hero-content p {
-  color: #eee;
-  margin: 10px 0 20px;
-}
-
-.btn {
-  background: var(--primary);
-  color: #fff;
-  padding: 10px 26px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  display: inline-block;
-}
 
 /* =====================
    COMMON SECTIONS
@@ -428,4 +443,48 @@ footer {
   .gallery-search {
     width: 90%;
   }
+}
+
+*{
+  box-sizing: border-box;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;   /* IMPORTANT */
+}
+
+.banner-slider{
+  width: 100vw;         /* full phone width */
+  overflow: hidden;
+}
+
+.slides{
+  display: flex;
+  width: 300vw;         /* 3 images × screen width */
+  animation: slide 9s infinite;
+}
+
+.slide{
+  width: 100vw;         /* ONE IMAGE = ONE SCREEN */
+  flex: 0 0 100vw;
+}
+
+.slide img{
+  width: 100vw;
+  height: auto;
+  display: block;
+}
+
+/* ===== AUTO SLIDE ANIMATION ===== */
+@keyframes slide{
+  0%{ transform: translateX(0); }
+  33%{ transform: translateX(0); }
+
+  34%{ transform: translateX(-100vw); }
+  66%{ transform: translateX(-100vw); }
+
+  67%{ transform: translateX(-200vw); }
+  100%{ transform: translateX(-200vw); }
 }
