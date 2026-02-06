@@ -310,3 +310,31 @@ footer {
     margin: auto;
   }
 }
+/* ================================ GALLERY SEARCH BAR ================================ */
+.gallery-search { width: 70%; 
+                 max-width: 700px; 
+                 margin: 0 auto 40px; 
+                 padding: 14px 22px; 
+                 border-radius: 50px; 
+                 display: flex; 
+                 align-items: center; 
+                 background: #ffffff; 
+                 border: 2px solid #2f9e8f; 
+                 box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+                } 
+.gallery-search input { width: 100%; 
+                       border: none; 
+                       outline: none; 
+                       font-size: 18px; 
+                       background: transparent; 
+                       color: #333; 
+                      } 
+.gallery-search input:placeholder { color: #999; }
+.gallery-search span { font-size: 22px; 
+                      margin-left: 15px; 
+                      color: #2f9e8f; 
+                     } 
+/* Mobile */ @media (max-width: 600px) { 
+.gallery-search { 
+   width: 90%;
+} }
