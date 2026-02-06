@@ -39,6 +39,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
+  position: relative;
 }
 
 .logo {
@@ -48,11 +49,6 @@ nav {
 
 .logo span {
   color: var(--primary);
-}
-
-/* ===== MAKE NAV POSITIONED (VERY IMPORTANT) ===== */
-nav {
-  position: relative;
 }
 
 /* ===== HAMBURGER BUTTON ===== */
@@ -70,48 +66,10 @@ nav {
   border-radius: 2px;
 }
 
-/* ===== MOBILE MENU ===== */
-@media (max-width: 768px) {
-
-  .menu-toggle {
-    display: flex;
-  }
-
-  .nav-links{
-    position: absolute;
-    top: 60px;      /* directly under menu button */
-    right: 10px;
-    width: 180px;
-    background: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    border-radius: 10px;
-    display: none;        /* hidden by default */
-    flex-direction: column;
-    padding: 8px;
-    z-index: 9999;
-  }
-
-  .nav-links a{
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    color: #264653;
-  }
-
-  .nav-links a:last-child{
-    border-bottom: none;
-  }
-
-  /* THIS IS THE ONLY CLASS WE USE */
-  .nav-links.active{
-    display: flex !important;
-  }
-}
-
 .nav-right{
   display: flex;
   align-items: center;
-  gap: 12px;   /* space between menu & cart */
+  gap: 12px;
 }
 
 /* =====================
@@ -127,14 +85,66 @@ nav {
   position: absolute;
   top: -6px;
   right: -10px;
-  background: #e76f51;   /* accent color */
+  background: #e76f51;
   color: #fff;
   font-size: 12px;
   padding: 2px 6px;
   border-radius: 50%;
-  display: none;         /* hidden when empty */
+  display: none;
 }
 
+/* =====================
+   SALE STRIP
+===================== */
+.sale-strip {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #e76f51, #e9c46a, #2a9d8f);
+  color: #ffffff;
+  padding: 10px 0;
+}
+
+.sale-track {
+  display: flex;
+  width: max-content;
+  animation: saleScroll 18s linear infinite;
+}
+
+.sale-track span {
+  white-space: nowrap;
+  padding: 0 40px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes saleScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* =====================
+   HERO SLIDER (FIXED)
+===================== */
+.banner-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
 /* =====================
    COMMON SECTIONS
@@ -152,7 +162,7 @@ nav {
 }
 
 /* =====================
-   GALLERY (PRODUCTS)
+   GALLERY GRID
 ===================== */
 .gallery-grid {
   display: grid;
@@ -186,15 +196,8 @@ nav {
   text-align: center;
 }
 
-.price {
-  font-weight: 700;
-  color: var(--primary);
-  text-align: center;
-
-}
-
 /* =====================
-   OUR STORY – LOCKED SIDE BY SIDE
+   ABOUT SECTION
 ===================== */
 .about {
   background: linear-gradient(135deg, #f4f9f8, #eef7f5);
@@ -202,61 +205,20 @@ nav {
 }
 
 .about-content {
-  display: flex !important;
-  flex-direction: row !important;     /* 🔒 never column */
-  align-items: stretch;
-  justify-content: space-between;
+  display: flex;
   gap: 24px;
-  flex-wrap: nowrap !important;       /* 🔒 never wrap */
   background: #ffffff;
   padding: 26px;
   border-radius: 18px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
-.about-text {
-  flex: 1.4;
-}
-
-.about-text p {
-  font-size: 15px;
-  line-height: 1.75;
-}
-
-.about-img {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.about-text { flex: 1.4; }
 
 .about-img img {
-  width: 100%;
   max-width: 220px;
-  height: auto;
-  object-fit: contain;
   border-radius: 14px;
 }
-
-/* =====================
-   MOBILE — FORCE SAME LAYOUT
-===================== */
-@media (max-width: 768px) {
-  .about-content {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .about-text p {
-    font-size: 14px;
-  }
-
-  .about-img img {
-    max-width: 140px;
-  }
-}
-
 
 /* =====================
    WHY US
@@ -273,12 +235,6 @@ nav {
   border-radius: 16px;
   text-align: center;
   box-shadow: 0 6px 18px rgba(0,0,0,0.07);
-}
-
-.why-card i {
-  font-size: 28px;
-  color: var(--primary);
-  margin-bottom: 10px;
 }
 
 /* =====================
@@ -306,7 +262,7 @@ footer {
 }
 
 /* =====================
-   MOBILE (AMAZON STYLE)
+   MOBILE (RESPONSIVE)
 ===================== */
 @media (max-width: 768px) {
 
@@ -317,28 +273,20 @@ footer {
   .nav-links {
     position: absolute;
     top: 60px;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    flex-direction: column;
+    right: 10px;
+    width: 180px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border-radius: 10px;
     display: none;
-    padding: 20px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    flex-direction: column;
+    padding: 8px;
   }
 
-  .nav-links.show {
+  .nav-links.active {
     display: flex;
   }
 
-  .hero {
-    height: 50vh;
-  }
-
-  .hero-content h1 {
-    font-size: 30px;
-  }
-
-  /* 🔥 2 PRODUCTS PER ROW */
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
@@ -348,143 +296,17 @@ footer {
     height: 140px;
   }
 
-  .product-title {
-    font-size: 14px;
-  }
-
   .why-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .about-content {
     flex-direction: column;
+    text-align: center;
   }
-}
 
-/* =====================
-   SALE STRIP (MARQUEE)
-===================== */
-.sale-strip {
-  width: 100%;
-  overflow: hidden;
-  background: linear-gradient(90deg, #e76f51, #e9c46a, #2a9d8f);
-  color: #ffffff;
-  padding: 10px 0;
-}
-
-.sale-track {
-  display: flex;
-  width: max-content;
-  animation: saleScroll 18s linear infinite;
-}
-
-.sale-track span {
-  white-space: nowrap;
-  padding: 0 40px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Animation */
-@keyframes saleScroll {
-  from {
-    transform: translateX(0);
+  .about-img img {
+    max-width: 140px;
+    margin: auto;
   }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .sale-track span {
-    font-size: 13px;
-    padding: 0 24px;
-  }
-}
-
-/* ================================
-   GALLERY SEARCH BAR
-================================ */
-.gallery-search {
-  width: 70%;
-  max-width: 700px;
-  margin: 0 auto 40px;
-  padding: 14px 22px;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 2px solid #2f9e8f;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-.gallery-search input {
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 18px;
-  background: transparent;
-  color: #333;
-}
-
-.gallery-search input::placeholder {
-  color: #999;
-}
-
-.gallery-search span {
-  font-size: 22px;
-  margin-left: 15px;
-  color: #2f9e8f;
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .gallery-search {
-    width: 90%;
-  }
-}
-
-*{
-  box-sizing: border-box;
-}
-
-body{
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;   /* IMPORTANT */
-}
-
-.banner-slider{
-  width: 100vw;         /* full phone width */
-  overflow: hidden;
-}
-
-.slides{
-  display: flex;
-  width: 300vw;         /* 3 images × screen width */
-  animation: slide 9s infinite;
-}
-
-.slide{
-  width: 100vw;         /* ONE IMAGE = ONE SCREEN */
-  flex: 0 0 100vw;
-}
-
-.slide img{
-  width: 100vw;
-  height: auto;
-  display: block;
-}
-
-/* ===== AUTO SLIDE ANIMATION ===== */
-@keyframes slide{
-  0%{ transform: translateX(0); }
-  33%{ transform: translateX(0); }
-
-  34%{ transform: translateX(-100vw); }
-  66%{ transform: translateX(-100vw); }
-
-  67%{ transform: translateX(-200vw); }
-  100%{ transform: translateX(-200vw); }
 }
